@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
 import SearchBar from './SearchBar';
 import youtube from '../apis/youtube';
+import VideoList from './VideoList';
 
 class App extends Component {
   state = {
-    movies: '',
+    videos: [],
   };
+
   onTermSubmit = async (term) => {
-    const result = await youtube.get('/search', {
+    const response = await youtube.get('/search', {
       params: { q: term },
     });
-
-    this.setState({ movies: result });
-    console.log(this.state.movies);
+    this.setState({ videos: response.data.items });
   };
 
   render() {
     return (
       <div className='ui container'>
         <SearchBar onTermSubmit={this.onTermSubmit} />
-        {/* <div>{this.state.movies.map((obj)=>{
-          
-        })}</div> */}
+        <VideoList videos={this.state.videos} />
       </div>
     );
   }
